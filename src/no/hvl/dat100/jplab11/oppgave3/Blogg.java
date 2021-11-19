@@ -1,72 +1,126 @@
 package no.hvl.dat100.jplab11.oppgave3;
 
+
 import no.hvl.dat100.jplab11.common.TODO;
 import no.hvl.dat100.jplab11.oppgave1.*;
+import java.util.*;
 
 public class Blogg {
+    private Innlegg[] innleggtabell;
+    private int nesteledig;
 
-	// TODO: objektvariable 
+    public Blogg() {
+        innleggtabell = new Innlegg[20];
+        nesteledig = 0;
+    }
 
-	public Blogg() {
-		throw new UnsupportedOperationException(TODO.constructor("Blogg"));
-	}
+    public Blogg(int lengde) {
+        innleggtabell = new Innlegg[lengde];
+        nesteledig = 0;
+    }
 
-	public Blogg(int lengde) {
-		throw new UnsupportedOperationException(TODO.constructor("Blogg"));
-	}
+    public int getAntall() {
+        return nesteledig;
+    }
+    
+    public Innlegg[] getSamling() {
+    return innleggtabell;
 
-	public int getAntall() {
-		throw new UnsupportedOperationException(TODO.method());
-	}
-	
-	public Innlegg[] getSamling() {
-		throw new UnsupportedOperationException(TODO.method());
+    }
+    
+    public int finnInnlegg(Innlegg innlegg) {
+        boolean funnet = false;
+        int pos = 0;
+        while(!funnet && pos<nesteledig) {
+            if(innleggtabell[pos].erLik(innlegg)) {
+                funnet = true;
+            }else {
+                pos++;
+            }
+        }
+        if(funnet)
+            return pos;
+                    
+        else
+            return -1;
+    }
 
-	}
-	
-	public int finnInnlegg(Innlegg innlegg) {
+    public boolean finnes(Innlegg innlegg) {
+        if(finnInnlegg(innlegg)>-1)
+            return true;
+        
+        else 
+            return false;
+    }
 
-		throw new UnsupportedOperationException(TODO.method());
-	}
+    public boolean ledigPlass() {
+        if(nesteledig >= innleggtabell.length)
+            return false;
+        else
+            return true;
 
-	public boolean finnes(Innlegg innlegg) {
-		throw new UnsupportedOperationException(TODO.method());
-	}
+    }
+    
+    public boolean leggTil(Innlegg innlegg) {
+        boolean ny = finnInnlegg(innlegg) == -1;
+        if(ny && ledigPlass()) {
+            innleggtabell[nesteledig] = innlegg;
+            nesteledig++;
+            return true;
+        }else
+            return false;
+    
+    }
+    
+    public String toString() {
+        String ut = nesteledig + "\n";
+        for(int i = 0; i<innleggtabell.length; i++) {
+            ut += innleggtabell[i].toString();
+        }
+        return ut;
+    }
 
-	public boolean ledigPlass() {
-		throw new UnsupportedOperationException(TODO.method());
+    // valgfrie oppgaver nedenfor
+    
+    public void utvid() {
+        innleggtabell = Arrays.copyOf(innleggtabell, nesteledig*2);
+    }
+    
+    public boolean leggTilUtvid(Innlegg innlegg) {
+        boolean ny = finnInnlegg(innlegg) == -1;
+        if(ny && ledigPlass()) {
+            innleggtabell[nesteledig] = innlegg;
+            nesteledig++;
+            return true;
+        }else
+            return false;
+        
+    }
+    
+    public boolean slett(Innlegg innlegg) {
+        int pos = finnInnlegg(innlegg);
+        if(pos > -1) {
+            nesteledig--;
+            innleggtabell[pos] = innleggtabell[nesteledig];
+            innleggtabell[nesteledig] = null;
+            
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
 
-	}
-	
-	public boolean leggTil(Innlegg innlegg) {
-
-		throw new UnsupportedOperationException(TODO.method());
-	}
-	
-	public String toString() {
-		throw new UnsupportedOperationException(TODO.method());
-	}
-
-	// valgfrie oppgaver nedenfor
-	
-	public void utvid() {
-		throw new UnsupportedOperationException(TODO.method());
-	}
-	
-	public boolean leggTilUtvid(Innlegg innlegg) {
-
-		throw new UnsupportedOperationException(TODO.method());
-		
-	}
-	
-	public boolean slett(Innlegg innlegg) {
-		
-		throw new UnsupportedOperationException(TODO.method());
-	}
-	
-	public int[] search(String keyword) {
-		
-		throw new UnsupportedOperationException(TODO.method());
-
-	}
+    
+    public int[] search(String keyword) {
+        String sokeStreng = keyword;
+        for(int i = 0; i<nesteledig; i++) {
+            if(innleggtabell[i].getBruker().contains(keyword)) {
+                return null;
+            }
+                
+            }
+        return null;
+        }    
 }
